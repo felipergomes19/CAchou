@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  error:
+    include-message: never
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ca-achou
+  datasource:
+    # Banco de arquivo (H2) para desenvolvimento. Em produção troque por PostgreSQL/MySQL
+    # (adicione o driver no pom.xml e altere url/username/password via variáveis de ambiente).
+    url: ${ACHOU_DB_URL:jdbc:h2:file:./data/achou;AUTO_SERVER=TRUE}
+    username: ${ACHOU_DB_USER:sa}
+    password: ${ACHOU_DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  # Para enviar e-mails de verdade (recuperação de senha), configure o SMTP e ligue achou.mail.enabled:
+  # spring:
+  #   mail:
+  #     host: smtp.gmail.com
+  #     port: 587
+  #     username: ${ACHOU_MAIL_USER}
+  #     password: ${ACHOU_MAIL_PASSWORD}
+  #     properties.mail.smtp.auth: true
+  #     properties.mail.smtp.starttls.enable: true
+
+achou:
+  jwt:
+    # TROQUE em produção (mínimo 32 caracteres) definindo ACHOU_JWT_SECRET.
+    secret: ${ACHOU_JWT_SECRET:dev-only-troque-este-segredo-em-producao-0123456789}
+    expiracao-horas: 12
+  uploads:
+    dir: ${ACHOU_UPLOADS_DIR:./data/uploads}
+    tamanho-maximo-bytes: 5242880
+  mail:
+    enabled: ${ACHOU_MAIL_ENABLED:false}
+    from: ${ACHOU_MAIL_FROM:no-reply@achou.local}
+  recuperacao:
+    validade-minutos: 15
+    max-tentativas: 5
+    intervalo-segundos: 60
+  # Lista exibida na tela de cadastro (ajuste para os cursos reais da unidade).
+  cursos:
+    - Administração
+    - Desenvolvimento de Sistemas
+    - Informática
+    - Nutrição e Dietética
+    - Logística
+    - Contabilidade
+    - Recursos Humanos
+    - Segurança do Trabalho

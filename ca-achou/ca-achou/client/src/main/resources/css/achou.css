@@ -1,0 +1,308 @@
+/* ==========================================================
+   CA Achou? — tema JavaFX
+   Paleta original preservada: navy #1b3057 · vermelho #e00008 · azul-claro #8099c8
+   O tema é escolhido por uma classe na raiz: .theme-light / .theme-dark / .theme-black
+   ========================================================== */
+
+.theme-light {
+    -navy: #1b3057;
+    -navy-2: #101d36;
+    -sh: #8099c8;
+    -red: #e00008;
+    -red-2: #ff6068;
+    -bg: #f4f7fc;
+    -card: #ffffff;
+    -ink: #0f172a;
+    -mute: #64748b;
+    -line: #e2e8f0;
+    -chip: #f1f5f9;
+    -field: #f8fafc;
+    -success: #16a34a;
+    -accent-text: #1b3057;
+    -red-soft: rgba(224, 0, 8, 0.08);
+}
+
+.theme-dark {
+    -navy: #1b3057;
+    -navy-2: #101d36;
+    -sh: #8099c8;
+    -red: #e00008;
+    -red-2: #ff6068;
+    -bg: #0b1329;
+    -card: #132042;
+    -ink: #f1f5f9;
+    -mute: #94a3b8;
+    -line: #1e2e5c;
+    -chip: #1a2952;
+    -field: #0f1a38;
+    -success: #22c55e;
+    -accent-text: #8099c8;
+    -red-soft: rgba(255, 96, 104, 0.14);
+}
+
+.theme-black {
+    -navy: #101c38;
+    -navy-2: #0a1226;
+    -sh: #8099c8;
+    -red: #e00008;
+    -red-2: #ff6068;
+    -bg: #000000;
+    -card: #0d0d11;
+    -ink: #f8fafc;
+    -mute: #8e9bae;
+    -line: #1f222e;
+    -chip: #161822;
+    -field: #08080b;
+    -success: #22c55e;
+    -accent-text: #8099c8;
+    -red-soft: rgba(255, 96, 104, 0.14);
+}
+
+/* ---------- Base ---------- */
+.root, .app-root {
+    -fx-font-family: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: -bg;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.label { -fx-text-fill: -ink; }
+.muted { -fx-text-fill: -mute; }
+.small { -fx-font-size: 12px; }
+.title-xl { -fx-font-family: "Archivo", "Arial Black", "Segoe UI"; -fx-font-size: 30px; -fx-font-weight: 900; -fx-font-style: italic; }
+.title-lg { -fx-font-family: "Archivo", "Arial Black", "Segoe UI"; -fx-font-size: 22px; -fx-font-weight: 800; }
+.box-title { -fx-font-family: "Archivo", "Segoe UI"; -fx-font-size: 17px; -fx-font-weight: 800; }
+.field-label { -fx-font-size: 12.5px; -fx-font-weight: 700; -fx-text-fill: -ink; }
+.error-text { -fx-text-fill: -red-2; -fx-font-weight: 700; -fx-font-size: 12.5px; }
+.link { -fx-text-fill: -accent-text; -fx-font-weight: 700; -fx-underline: false; -fx-cursor: hand; }
+.link:hover { -fx-underline: true; }
+
+.icon { -fx-fill: transparent; -fx-stroke-width: 2; -fx-stroke-line-cap: round; -fx-stroke-line-join: round; }
+.icon-ink { -fx-stroke: -ink; }
+.icon-white { -fx-stroke: white; }
+.icon-navy { -fx-stroke: #1b3057; }
+.icon-mute { -fx-stroke: -mute; }
+.icon-red { -fx-stroke: -red; }
+.icon-accent { -fx-stroke: -accent-text; }
+
+/* ---------- Cabeçalho ---------- */
+.header {
+    -fx-background-color: -navy;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0, 0, 4);
+}
+.header-bar { -fx-padding: 12 24 10 24; }
+.brand-title {
+    -fx-font-family: "Archivo", "Arial Black", "Segoe UI";
+    -fx-font-size: 29px; -fx-font-weight: 900; -fx-font-style: italic;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, -sh, 0, 1, 2, 2);
+}
+.brand-sub { -fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px; -fx-font-weight: 600; }
+.nav { -fx-padding: 0 20 0 20; -fx-border-color: rgba(255,255,255,0.08) transparent transparent transparent; -fx-border-width: 1 0 0 0; }
+.nav-btn {
+    -fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.75);
+    -fx-font-weight: 700; -fx-font-size: 13.5px; -fx-padding: 11 16 9 16;
+    -fx-background-radius: 0; -fx-cursor: hand;
+    -fx-border-color: transparent transparent transparent transparent; -fx-border-width: 0 0 3 0;
+    -fx-content-display: left; -fx-graphic-text-gap: 7;
+}
+.nav-btn:hover { -fx-text-fill: white; }
+.nav-btn:selected { -fx-text-fill: white; -fx-border-color: transparent transparent -red transparent; }
+.nav-btn .icon { -fx-stroke: rgba(255,255,255,0.75); }
+.nav-btn:selected .icon, .nav-btn:hover .icon { -fx-stroke: white; }
+.header-user { -fx-text-fill: white; -fx-font-weight: 700; -fx-font-size: 13px; }
+
+/* ---------- Botões ---------- */
+.btn {
+    -fx-background-radius: 999; -fx-padding: 10 20 10 20; -fx-font-weight: 800; -fx-font-size: 13.5px;
+    -fx-cursor: hand; -fx-content-display: left;
+}
+.btn-primary {
+    -fx-background-color: -red; -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(224,0,8,0.35), 12, 0, 0, 4);
+}
+.btn-primary:hover { -fx-background-color: #f0000a; -fx-effect: dropshadow(gaussian, rgba(224,0,8,0.5), 16, 0, 0, 6); }
+.btn-primary:pressed { -fx-translate-y: 1; }
+.btn-primary:disabled { -fx-opacity: 0.55; }
+.btn-ghost {
+    -fx-background-color: transparent; -fx-text-fill: -ink;
+    -fx-border-color: -line; -fx-border-width: 2; -fx-border-radius: 999;
+}
+.btn-ghost:hover { -fx-background-color: -chip; -fx-border-color: -mute; }
+.btn-white { -fx-background-color: white; -fx-text-fill: #1b3057; }
+.btn-white:hover { -fx-background-color: #f1f5f9; }
+.btn-header {
+    -fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;
+    -fx-border-color: rgba(255,255,255,0.28); -fx-border-radius: 999;
+}
+.btn-header:hover { -fx-background-color: rgba(255,255,255,0.2); }
+.btn-danger { -fx-background-color: transparent; -fx-text-fill: -red; -fx-border-color: rgba(224,0,8,0.35); -fx-border-width: 1.5; -fx-border-radius: 999; }
+.btn-danger:hover { -fx-background-color: -red-soft; }
+.btn-small { -fx-padding: 6 14 6 14; -fx-font-size: 12px; }
+.btn-text {
+    -fx-background-color: transparent; -fx-padding: 8 12 8 12; -fx-background-radius: 10;
+    -fx-text-fill: -accent-text; -fx-font-weight: 800; -fx-font-size: 12.5px; -fx-cursor: hand;
+    -fx-content-display: left; -fx-graphic-text-gap: 6;
+}
+.btn-text:hover { -fx-background-color: -chip; }
+.btn-claim { -fx-text-fill: -red; }
+.btn-claim:hover { -fx-background-color: -red-soft; }
+
+/* ---------- Campos ---------- */
+.text-field, .password-field, .text-area, .combo-box-base {
+    -fx-background-color: -field; -fx-text-fill: -ink; -fx-prompt-text-fill: -mute;
+    -fx-border-color: -line; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;
+    -fx-padding: 10 14 10 14;
+}
+.text-field:focused, .password-field:focused, .text-area:focused, .combo-box-base:focused {
+    -fx-border-color: -accent-text; -fx-effect: dropshadow(gaussian, rgba(128,153,200,0.45), 8, 0, 0, 0);
+}
+.text-area .content { -fx-background-color: transparent; }
+.text-area { -fx-padding: 2; }
+.text-area .viewport, .text-area .scroll-pane { -fx-background-color: transparent; }
+.search-field { -fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 10 16 10 42; }
+.combo-box-base { -fx-padding: 2 4 2 4; }
+.combo-box .list-cell { -fx-text-fill: -ink; -fx-background-color: transparent; -fx-padding: 8 10 8 10; }
+.combo-box .arrow-button { -fx-background-color: transparent; }
+.combo-box .arrow { -fx-background-color: -mute; }
+.combo-box-popup .list-view { -fx-background-color: -card; -fx-border-color: -line; -fx-background-radius: 10; -fx-border-radius: 10; }
+.combo-box-popup .list-cell { -fx-background-color: -card; -fx-text-fill: -ink; -fx-padding: 8 12 8 12; }
+.combo-box-popup .list-cell:filled:hover, .combo-box-popup .list-cell:filled:selected { -fx-background-color: -chip; -fx-text-fill: -ink; }
+
+/* ---------- Chips e segmentados ---------- */
+.seg-btn {
+    -fx-background-color: -card; -fx-border-color: -line; -fx-border-width: 2; -fx-border-radius: 999; -fx-background-radius: 999;
+    -fx-padding: 7 16 7 16; -fx-font-weight: 700; -fx-font-size: 12.5px; -fx-text-fill: -ink; -fx-cursor: hand;
+}
+.seg-btn:hover { -fx-border-color: -sh; }
+.seg-btn:selected { -fx-background-color: -navy; -fx-border-color: -navy; -fx-text-fill: white; }
+.theme-dark .seg-btn:selected, .theme-black .seg-btn:selected { -fx-border-color: -sh; }
+.cat-chip { -fx-padding: 6 14 6 14; -fx-font-size: 12px; }
+.cat-chip:selected { -fx-background-color: -red; -fx-border-color: -red; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(224,0,8,0.3), 10, 0, 0, 3); }
+.sub-chip { -fx-padding: 4 12 4 12; -fx-font-size: 11.5px; -fx-background-color: transparent; }
+.sub-chip:selected { -fx-background-color: -navy; -fx-border-color: -navy; -fx-text-fill: white; }
+
+.chip {
+    -fx-background-color: -chip; -fx-background-radius: 999; -fx-padding: 4 12 4 10;
+    -fx-text-fill: -mute; -fx-font-size: 12px; -fx-font-weight: 700; -fx-content-display: left; -fx-graphic-text-gap: 5;
+}
+
+/* ---------- Páginas ---------- */
+.page, .page > .viewport { -fx-background-color: transparent; -fx-background: transparent; }
+.scroll-pane { -fx-background-color: transparent; -fx-padding: 0; }
+.scroll-bar:vertical, .scroll-bar:horizontal { -fx-background-color: transparent; -fx-pref-width: 10; }
+.scroll-bar .thumb { -fx-background-color: -line; -fx-background-radius: 8; }
+.scroll-bar .track, .scroll-bar .increment-button, .scroll-bar .decrement-button { -fx-background-color: transparent; -fx-padding: 0; }
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow { -fx-shape: " "; -fx-padding: 0; }
+
+/* ---------- Hero ---------- */
+.hero {
+    -fx-background-color: linear-gradient(to bottom right, -navy 0%, -navy-2 100%);
+    -fx-background-radius: 20; -fx-padding: 28 28 28 28;
+    -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.18), 24, 0, 0, 8);
+}
+.hero-title { -fx-font-family: "Archivo", "Arial Black", "Segoe UI"; -fx-font-size: 28px; -fx-font-weight: 900; -fx-font-style: italic; -fx-text-fill: white; }
+.hero-text { -fx-text-fill: rgba(255,255,255,0.88); -fx-font-size: 14.5px; }
+
+/* ---------- Cartões de publicação ---------- */
+.post {
+    -fx-background-color: -card; -fx-background-radius: 20; -fx-border-color: -line; -fx-border-radius: 20; -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.07), 10, 0, 0, 2);
+}
+.post:hover { -fx-border-color: rgba(128,153,200,0.55); -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.14), 20, 0, 0, 6); }
+.post-head { -fx-padding: 14 18 12 18; }
+.post-author { -fx-font-weight: 800; -fx-font-size: 14px; }
+.post-body { -fx-padding: 14 18 16 18; }
+.post-title { -fx-font-family: "Archivo", "Segoe UI"; -fx-font-size: 18px; -fx-font-weight: 800; }
+.post-actions { -fx-padding: 6 12 8 12; -fx-border-color: -line transparent transparent transparent; -fx-border-width: 1 0 0 0; }
+.post-photo-wrap { -fx-background-color: -chip; }
+.post-no-photo { -fx-background-color: -chip; -fx-min-height: 96; -fx-pref-height: 96; }
+.comments { -fx-background-color: -chip; -fx-padding: 12 18 16 18; -fx-background-radius: 0 0 20 20; -fx-border-color: -line transparent transparent transparent; -fx-border-style: segments(5, 4); }
+.comment {
+    -fx-background-color: -card; -fx-background-radius: 14; -fx-border-color: -line; -fx-border-radius: 14; -fx-padding: 9 14 9 14;
+}
+.comment-author { -fx-font-weight: 800; -fx-text-fill: -accent-text; }
+
+/* Etiqueta Perdeu / Achou / Devolvido */
+.tag {
+    -fx-background-radius: 999; -fx-padding: 4 14 4 14; -fx-text-fill: white;
+    -fx-font-weight: 900; -fx-font-style: italic; -fx-font-size: 11.5px;
+}
+.tag-perdi { -fx-background-color: -red; }
+.tag-achei { -fx-background-color: -navy; -fx-border-color: -sh; -fx-border-radius: 999; }
+.tag-devolvido { -fx-background-color: -success; }
+
+/* ---------- Avatar ---------- */
+.avatar {
+    -fx-background-color: linear-gradient(to bottom right, -sh, -navy);
+    -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.2), 6, 0, 0, 2);
+}
+.avatar-initial { -fx-text-fill: white; -fx-font-weight: 900; -fx-font-style: italic; -fx-font-family: "Archivo", "Segoe UI"; }
+
+/* ---------- Caixas (perfil / ajustes) ---------- */
+.box {
+    -fx-background-color: -card; -fx-background-radius: 20; -fx-border-color: -line; -fx-border-radius: 20;
+    -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.06), 8, 0, 0, 2);
+}
+.stat {
+    -fx-background-color: -navy; -fx-background-radius: 14; -fx-padding: 14 10 14 10;
+    -fx-border-color: rgba(255,255,255,0.08); -fx-border-radius: 14;
+}
+.stat-num { -fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: 900; -fx-font-style: italic; -fx-font-family: "Archivo", "Segoe UI"; }
+.stat-label { -fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 12px; }
+.hist-row { -fx-padding: 12 0 12 0; -fx-border-color: -line transparent transparent transparent; -fx-border-width: 1 0 0 0; }
+.empty {
+    -fx-background-color: -card; -fx-background-radius: 20; -fx-border-color: -line; -fx-border-radius: 20; -fx-border-width: 2;
+    -fx-border-style: segments(8, 6); -fx-padding: 40 20 40 20;
+}
+
+/* ---------- Tela de entrada ---------- */
+.auth-left {
+    -fx-background-color: linear-gradient(to bottom right, -navy 0%, -navy-2 100%);
+    -fx-padding: 48;
+}
+.auth-claim { -fx-font-family: "Archivo", "Arial Black", "Segoe UI"; -fx-font-size: 34px; -fx-font-weight: 900; -fx-font-style: italic; -fx-text-fill: white; }
+.auth-claim-text { -fx-text-fill: rgba(255,255,255,0.88); -fx-font-size: 15px; }
+.auth-point { -fx-text-fill: rgba(255,255,255,0.92); -fx-font-weight: 600; -fx-font-size: 14px; }
+.auth-right { -fx-background-color: -bg; }
+.auth-card {
+    -fx-background-color: -card; -fx-background-radius: 22; -fx-border-color: -line; -fx-border-radius: 22; -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(27,48,87,0.14), 28, 0, 0, 10);
+}
+.auth-title { -fx-font-family: "Archivo", "Arial Black", "Segoe UI"; -fx-font-size: 26px; -fx-font-weight: 900; -fx-font-style: italic; -fx-text-fill: -red; }
+.auth-tabs { -fx-background-color: -chip; -fx-background-radius: 999; -fx-padding: 4; }
+.auth-tab {
+    -fx-background-color: transparent; -fx-background-radius: 999; -fx-padding: 8 18 8 18;
+    -fx-font-weight: 800; -fx-text-fill: -mute; -fx-cursor: hand;
+}
+.auth-tab:selected { -fx-background-color: -card; -fx-text-fill: -ink; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 1); }
+
+/* ---------- Diálogos ---------- */
+.dialog-root { -fx-background-color: -card; -fx-padding: 24; }
+.dialog-pane { -fx-background-color: -card; }
+.dialog-pane .content.label { -fx-text-fill: -ink; }
+.dialog-pane .button-bar .button { -fx-background-radius: 999; -fx-padding: 8 18 8 18; -fx-font-weight: 800; -fx-background-color: -chip; -fx-text-fill: -ink; }
+.dialog-pane .button-bar .button:default { -fx-background-color: -red; -fx-text-fill: white; }
+.dropzone {
+    -fx-background-color: -field; -fx-background-radius: 14; -fx-border-color: -line; -fx-border-radius: 14; -fx-border-width: 2;
+    -fx-border-style: segments(8, 6); -fx-padding: 16; -fx-cursor: hand;
+}
+.dropzone:hover { -fx-border-color: -sh; -fx-background-color: -chip; }
+.radio-card {
+    -fx-background-color: transparent; -fx-border-color: -line; -fx-border-width: 2; -fx-border-radius: 14; -fx-background-radius: 14;
+    -fx-padding: 11 12 11 12; -fx-font-weight: 700; -fx-text-fill: -ink; -fx-cursor: hand;
+}
+.radio-card:selected { -fx-border-color: -red; -fx-background-color: -red-soft; -fx-text-fill: -red; }
+
+/* ---------- Avisos ---------- */
+.toasts { -fx-padding: 0 0 22 0; }
+.toast {
+    -fx-background-radius: 14; -fx-padding: 12 20 12 20; -fx-font-weight: 700; -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 16, 0, 0, 6);
+}
+.toast-ok { -fx-background-color: -navy; -fx-border-color: -sh; -fx-border-radius: 14; }
+.toast-erro { -fx-background-color: #b00007; }
+
+.footer { -fx-text-fill: -mute; -fx-font-size: 12px; -fx-padding: 10 24 14 24; }
+.tooltip { -fx-background-color: -navy; -fx-text-fill: white; -fx-background-radius: 8; }
