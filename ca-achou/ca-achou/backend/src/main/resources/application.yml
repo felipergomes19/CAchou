@@ -29,7 +29,6 @@ spring:
 
 achou:
   jwt:
-    # TROQUE em produção (mínimo 32 caracteres) definindo ACHOU_JWT_SECRET.
     secret: ${ACHOU_JWT_SECRET:dev-only-troque-este-segredo-em-producao-0123456789}
     expiracao-horas: 12
   uploads:
@@ -42,13 +41,14 @@ achou:
     validade-minutos: 15
     max-tentativas: 5
     intervalo-segundos: 60
-  # Lista exibida na tela de cadastro (ajuste para os cursos reais da unidade).
+  # Lista exibida na tela de cadastro.
   cursos:
     - Administração
     - Desenvolvimento de Sistemas
-    - Informática
-    - Nutrição e Dietética
-    - Logística
+    - Nutrição
     - Contabilidade
-    - Recursos Humanos
-    - Segurança do Trabalho
+    - Marketing
+    - Gastronomia
+    - Guia de Turismo
+    - Eventos
+

@@ -38,7 +38,7 @@ public class App extends Application {
         ThemeManager.aplicar(cena.getRoot());
         cena.getStylesheets().add(Ctx.css());
 
-        stage.setTitle("CA Achou? — Etec Camargo Aranha");
+        stage.setTitle("CAchou? — Etec Camargo Aranha");
         stage.setMinWidth(860);
         stage.setMinHeight(600);
         stage.setScene(cena);

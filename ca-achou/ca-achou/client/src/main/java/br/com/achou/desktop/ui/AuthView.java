@@ -131,7 +131,7 @@ public final class AuthView extends HBox {
     // ------------------------------------------------------------ entrar
 
     private void mostrarLogin() {
-        TextField rm = Ui.entrada("Seu RM da Etec (ex.: 12345)");
+        TextField rm = Ui.entrada("Seu RM da Etec (Pode ser consultado pelo NSA)");
         Ui.somenteDigitos(rm, 8);
         PasswordField senha = Ui.senha("Sua senha");
 
@@ -160,7 +160,7 @@ public final class AuthView extends HBox {
         VBox form = new VBox(14,
                 Ui.campo("RM", rm), Ui.campo("Senha", senha), entrar, esqueci);
         form.setAlignment(Pos.CENTER_LEFT);
-        trocar("Entrar no CA Achou?", true, form);
+        trocar("Entrar no CAchou?", true, form);
         rm.requestFocus();
     }
 
@@ -227,7 +227,7 @@ public final class AuthView extends HBox {
         VBox form = new VBox(12, linhaNome, Ui.campo("RM", rm), linhaCurso,
                 Ui.campo("E-mail (para recuperação de senha)", email), aviso,
                 Ui.campo("Senha", senha), Ui.campo("Confirmar senha", confirma), criar);
-        trocar("Criar conta no CA Achou?", true, form);
+        trocar("Criar conta no CAchou?", true, form);
         nome.requestFocus();
     }
 

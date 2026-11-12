@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 /** Estado global do aplicativo: cliente da API, usuário logado, navegação e avisos (toasts). */
 public final class Ctx {
 
-    /** Endereço do backend: -Dachou.api=..., variável ACHOU_API ou preferência salva. */
+    /** Endereço do backend: -CAchou.api=..., variável ACHOU_API ou preferência salva. */
     public static final String API_URL = System.getProperty("achou.api",
             System.getenv().getOrDefault("ACHOU_API", Prefs.get("api", "http://localhost:8080")));
 
