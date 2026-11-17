@@ -1,0 +1,45 @@
+# Blueprint da Render para o backend (a API). O PostgreSQL é um serviço À PARTE (ver ca-achou/ca-achou/README.md):
+# o Postgres gratuito da Render expira em 30 dias, então prefira um provedor de banco sem esse limite.
+# Valores marcados com "sync: false" são pedidos no painel da Render ao criar o Blueprint (nunca vão para o git).
+#
+# ATENÇÃO (plano free): a Render bloqueia saída nas portas SMTP 25, 465 e 587 em serviços gratuitos.
+# Use um provedor SMTP que ofereça outra porta (confira na documentação dele) ou um plano pago.
+services:
+  - type: web
+    name: achou-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./ca-achou/ca-achou/backend/Dockerfile
+    dockerContext: ./ca-achou/ca-achou/backend
+    # Rota pública e leve (não consulta o banco) usada pela Render para saber se o serviço subiu.
+    healthCheckPath: /api/cursos
+    envVars:
+      # --- banco de dados (PostgreSQL gerenciado) ---
+      - key: ACHOU_DB_HOST
+        sync: false
+      - key: ACHOU_DB_PORT
+        value: "5432"
+      - key: ACHOU_DB_NAME
+        sync: false
+      - key: ACHOU_DB_USER
+        sync: false
+      - key: ACHOU_DB_PASSWORD
+        sync: false
+      - key: ACHOU_DB_SSLMODE
+        value: require
+      # --- segurança ---
+      - key: ACHOU_JWT_SECRET
+        generateValue: true
+      # --- e-mail (recuperação de senha) ---
+      - key: ACHOU_MAIL_ENABLED
+        value: "true"
+      - key: ACHOU_MAIL_HOST
+        sync: false
+      - key: ACHOU_MAIL_PORT
+        sync: false
+      - key: ACHOU_MAIL_USER
+        sync: false
+      - key: ACHOU_MAIL_PASSWORD
+        sync: false
+      - key: ACHOU_MAIL_FROM
+        sync: false

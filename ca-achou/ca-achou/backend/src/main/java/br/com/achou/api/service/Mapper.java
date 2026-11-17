@@ -17,7 +17,8 @@ public class Mapper {
 
     public UsuarioDto usuario(Usuario u) {
         return new UsuarioDto(u.getId(), u.getRm(), u.getNome(), u.getSobrenome(), u.nomeCompleto(), u.getEmail(),
-                u.getCurso(), u.getAno(), u.turma(), url(u.getFoto()), u.getCriadoEm());
+                u.getCurso(), u.getAno(), u.turma(), u.getTurno(),
+                u.getTurno() == null ? null : u.getTurno().getRotulo(), url(u.getFoto()), u.getCriadoEm());
     }
 
     public AutorDto autor(Usuario u) {

@@ -32,6 +32,11 @@ public class Usuario {
     @Column(nullable = false)
     private int ano;
 
+    /** Nulo apenas em contas criadas antes deste campo existir; cadastro e edição de perfil exigem o valor. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private Turno turno;
+
     @Column(name = "senha_hash", nullable = false, length = 100)
     private String senhaHash;
 
@@ -63,6 +68,8 @@ public class Usuario {
     public void setCurso(String curso) { this.curso = curso; }
     public int getAno() { return ano; }
     public void setAno(int ano) { this.ano = ano; }
+    public Turno getTurno() { return turno; }
+    public void setTurno(Turno turno) { this.turno = turno; }
     public String getSenhaHash() { return senhaHash; }
     public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
     public String getFoto() { return foto; }

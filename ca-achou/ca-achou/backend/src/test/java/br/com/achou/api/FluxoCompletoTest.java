@@ -26,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:achou-test;DB_CLOSE_DELAY=-1",
-        "achou.uploads.dir=${java.io.tmpdir}/achou-test-uploads"
+        "spring.datasource.username=sa",
+        "spring.datasource.password="
 })
 @AutoConfigureMockMvc
 class FluxoCompletoTest {
@@ -47,7 +48,7 @@ class FluxoCompletoTest {
     private String cadastrar(String rm, String nome) throws Exception {
         JsonNode r = chamar(HttpMethod.POST, "/api/auth/cadastro", null, Map.of(
                 "nome", nome, "sobrenome", "Souza", "rm", rm, "email", nome.toLowerCase() + "@exemplo.com",
-                "curso", "Desenvolvimento de Sistemas", "ano", 2, "senha", "segredo123"), 201);
+                "curso", "Desenvolvimento de Sistemas", "ano", 2, "turno", "TARDE", "senha", "segredo123"), 201);
         return r.get("token").asText();
     }
 
@@ -59,10 +60,11 @@ class FluxoCompletoTest {
         // RM duplicado e senha errada
         chamar(HttpMethod.POST, "/api/auth/cadastro", null, Map.of(
                 "nome", "X", "sobrenome", "Y", "rm", "12345", "email", "x@y.com",
-                "curso", "Informática", "ano", 1, "senha", "segredo123"), 409);
+                "curso", "Informática", "ano", 1, "turno", "MANHA", "senha", "segredo123"), 409);
         chamar(HttpMethod.POST, "/api/auth/login", null, Map.of("rm", "12345", "senha", "errada"), 401);
         JsonNode login = chamar(HttpMethod.POST, "/api/auth/login", null, Map.of("rm", "12345", "senha", "segredo123"), 200);
         assertEquals("Ana Souza", login.get("usuario").get("nomeCompleto").asText());
+        assertEquals("TARDE", login.get("usuario").get("turno").asText());
 
         // sem token = 401
         chamar(HttpMethod.GET, "/api/publicacoes", null, null, 401);
@@ -84,7 +86,13 @@ class FluxoCompletoTest {
                         .header("Authorization", "Bearer " + tokenAna)
                         .contentType(MediaType.IMAGE_PNG).content(png))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        assertTrue(om.readTree(resp).get("fotoUrl").asText().startsWith("/api/arquivos/"));
+        String fotoUrl = om.readTree(resp).get("fotoUrl").asText();
+        assertTrue(fotoUrl.startsWith("/api/arquivos/"));
+        // a foto é guardada no banco e devolvida byte a byte para qualquer usuário logado
+        byte[] baixada = mvc.perform(request(HttpMethod.GET, fotoUrl).header("Authorization", "Bearer " + tokenLeo))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsByteArray();
+        assertArrayEquals(png, baixada);
+        chamar(HttpMethod.GET, "/api/arquivos/00000000-0000-0000-0000-000000000000.png", tokenLeo, null, 404);
         mvc.perform(request(HttpMethod.PUT, "/api/publicacoes/" + id + "/foto")
                         .header("Authorization", "Bearer " + tokenAna)
                         .contentType(MediaType.APPLICATION_OCTET_STREAM).content("texto".getBytes()))
@@ -109,6 +117,39 @@ class FluxoCompletoTest {
         assertTrue(chamar(HttpMethod.PATCH, "/api/publicacoes/" + id + "/devolvido", tokenAna, null, 200).get("devolvido").asBoolean());
         chamar(HttpMethod.DELETE, "/api/publicacoes/" + id, tokenLeo, null, 403);
         chamar(HttpMethod.DELETE, "/api/publicacoes/" + id, tokenAna, null, 204);
+    }
+
+    @Test
+    void turnoNoCadastroEEdicaoDoPerfil() throws Exception {
+        Map<String, Object> base = Map.of(
+                "nome", "Caio", "sobrenome", "Souza", "rm", "77777", "email", "caio@exemplo.com",
+                "curso", "Desenvolvimento de Sistemas", "ano", 3, "senha", "segredo123");
+
+        // sem turno e com turno inexistente: recusado
+        chamar(HttpMethod.POST, "/api/auth/cadastro", null, base, 400);
+        var invalido = new java.util.HashMap<>(base);
+        invalido.put("turno", "MADRUGADA");
+        chamar(HttpMethod.POST, "/api/auth/cadastro", null, invalido, 400);
+
+        // cadastro com turno devolve o turno e o rótulo
+        var valido = new java.util.HashMap<>(base);
+        valido.put("turno", "INTEGRAL");
+        JsonNode cadastro = chamar(HttpMethod.POST, "/api/auth/cadastro", null, valido, 201);
+        String token = cadastro.get("token").asText();
+        assertEquals("INTEGRAL", cadastro.get("usuario").get("turno").asText());
+        assertEquals("Integral", cadastro.get("usuario").get("turnoRotulo").asText());
+
+        // edição do perfil exige turno e persiste a troca
+        Map<String, Object> perfil = Map.of("nome", "Caio", "sobrenome", "Souza", "email", "caio@exemplo.com",
+                "curso", "Desenvolvimento de Sistemas", "ano", 3);
+        chamar(HttpMethod.PUT, "/api/me", token, perfil, 400);
+
+        var comNoite = new java.util.HashMap<>(perfil);
+        comNoite.put("turno", "NOITE");
+        assertEquals("NOITE", chamar(HttpMethod.PUT, "/api/me", token, comNoite, 200).get("turno").asText());
+        JsonNode me = chamar(HttpMethod.GET, "/api/me", token, null, 200);
+        assertEquals("NOITE", me.get("turno").asText());
+        assertEquals("Noite", me.get("turnoRotulo").asText());
     }
 
     @Test

@@ -2,6 +2,7 @@ package br.com.achou.api.dto;
 
 import br.com.achou.api.domain.Categoria;
 import br.com.achou.api.domain.Tipo;
+import br.com.achou.api.domain.Turno;
 import jakarta.validation.constraints.*;
 
 import java.time.Instant;
@@ -21,6 +22,7 @@ public final class Dtos {
             @NotBlank(message = "Informe seu e-mail.") @Email(message = "E-mail inválido.") @Size(max = 120) String email,
             @NotBlank(message = "Informe seu curso.") @Size(max = 60) String curso,
             @Min(value = 1, message = "Ano inválido.") @Max(value = 4, message = "Ano inválido.") int ano,
+            @NotNull(message = "Escolha seu turno.") Turno turno,
             @NotBlank(message = "Informe uma senha.") @Size(min = 6, max = 72, message = "A senha deve ter de 6 a 72 caracteres.") String senha) {}
 
     public record LoginRequest(
@@ -39,7 +41,8 @@ public final class Dtos {
             @NotBlank(message = "Informe seu sobrenome.") @Size(max = 60) String sobrenome,
             @NotBlank(message = "Informe seu e-mail.") @Email(message = "E-mail inválido.") @Size(max = 120) String email,
             @NotBlank(message = "Informe seu curso.") @Size(max = 60) String curso,
-            @Min(1) @Max(4) int ano) {}
+            @Min(1) @Max(4) int ano,
+            @NotNull(message = "Escolha seu turno.") Turno turno) {}
 
     public record AlterarSenhaRequest(
             @NotBlank(message = "Informe a senha atual.") String senhaAtual,
@@ -64,7 +67,8 @@ public final class Dtos {
 
     /** Dados do próprio usuário (inclui RM e e-mail; nunca é enviado para outros usuários). */
     public record UsuarioDto(Long id, String rm, String nome, String sobrenome, String nomeCompleto, String email,
-                             String curso, int ano, String turma, String fotoUrl, Instant criadoEm) {}
+                             String curso, int ano, String turma, Turno turno, String turnoRotulo,
+                             String fotoUrl, Instant criadoEm) {}
 
     /** Dados públicos do autor de uma publicação/comentário (sem RM nem e-mail). */
     public record AutorDto(Long id, String nome, String sobrenome, String nomeCompleto, String turma, String fotoUrl) {}

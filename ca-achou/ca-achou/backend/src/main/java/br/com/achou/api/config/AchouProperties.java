@@ -9,7 +9,7 @@ public record AchouProperties(Jwt jwt, Uploads uploads, Mail mail, Recuperacao r
 
     public record Jwt(String secret, int expiracaoHoras) {}
 
-    public record Uploads(String dir, long tamanhoMaximoBytes) {}
+    public record Uploads(long tamanhoMaximoBytes) {}
 
     public record Mail(boolean enabled, String from) {}
 

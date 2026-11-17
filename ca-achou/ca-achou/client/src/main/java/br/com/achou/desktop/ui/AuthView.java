@@ -191,6 +191,11 @@ public final class AuthView extends HBox {
         });
         ano.setMaxWidth(Double.MAX_VALUE);
 
+        ComboBox<Dtos.Turno> turno = new ComboBox<>();
+        turno.getItems().addAll(Dtos.Turno.values());
+        turno.setPromptText("Selecione");
+        turno.setMaxWidth(Double.MAX_VALUE);
+
         PasswordField senha = Ui.senha("Mínimo de 6 caracteres");
         PasswordField confirma = Ui.senha("Repita a senha");
 
@@ -198,7 +203,8 @@ public final class AuthView extends HBox {
         criar.setMaxWidth(Double.MAX_VALUE);
         criar.setOnAction(e -> {
             String c = curso.isEditable() ? curso.getEditor().getText() : curso.getValue();
-            String msg = validarCadastro(nome, sobrenome, rm, email, c, ano.getValue(), senha, confirma);
+            String msg = validarCadastro(nome, sobrenome, rm, email, c, ano.getValue(), turno.getValue(),
+                    senha, confirma);
             if (msg != null) {
                 mostrarErro(msg);
                 return;
@@ -206,7 +212,7 @@ public final class AuthView extends HBox {
             mostrarErro(null);
             Ui.ocupado(criar, true, "Criar conta");
             var req = new Dtos.Cadastro(nome.getText().trim(), sobrenome.getText().trim(), rm.getText().trim(),
-                    email.getText().trim(), c.trim(), ano.getValue(), senha.getText());
+                    email.getText().trim(), c.trim(), ano.getValue(), turno.getValue(), senha.getText());
             Async.run(() -> Ctx.api.cadastrar(req), aoAutenticar, t -> {
                 Ui.ocupado(criar, false, "Criar conta");
                 mostrarErro(t.getMessage());
@@ -215,16 +221,18 @@ public final class AuthView extends HBox {
 
         HBox linhaNome = new HBox(12, Ui.campo("Nome", nome), Ui.campo("Sobrenome", sobrenome));
         linhaNome.getChildren().forEach(n -> HBox.setHgrow(n, Priority.ALWAYS));
-        VBox colCurso = Ui.campo("Curso", curso);
         VBox colAno = Ui.campo("Ano", ano);
-        HBox.setHgrow(colCurso, Priority.ALWAYS);
-        colAno.setMinWidth(110);
-        HBox linhaCurso = new HBox(12, colCurso, colAno);
+        VBox colTurno = Ui.campo("Turno", turno);
+        HBox.setHgrow(colAno, Priority.ALWAYS);
+        HBox.setHgrow(colTurno, Priority.ALWAYS);
+        colAno.setPrefWidth(10);
+        colTurno.setPrefWidth(10);
+        HBox linhaAnoTurno = new HBox(12, colAno, colTurno);
 
         Label aviso = Ui.paragrafo("O e-mail é usado somente para recuperar sua senha. O login é feito com o RM.",
                 "muted", "small");
 
-        VBox form = new VBox(12, linhaNome, Ui.campo("RM", rm), linhaCurso,
+        VBox form = new VBox(12, linhaNome, Ui.campo("RM", rm), Ui.campo("Curso", curso), linhaAnoTurno,
                 Ui.campo("E-mail (para recuperação de senha)", email), aviso,
                 Ui.campo("Senha", senha), Ui.campo("Confirmar senha", confirma), criar);
         trocar("Criar conta no CAchou?", true, form);
@@ -232,12 +240,14 @@ public final class AuthView extends HBox {
     }
 
     private static String validarCadastro(TextField nome, TextField sobrenome, TextField rm, TextField email,
-                                          String curso, Integer ano, PasswordField senha, PasswordField confirma) {
+                                          String curso, Integer ano, Dtos.Turno turno, PasswordField senha,
+                                          PasswordField confirma) {
         if (nome.getText().isBlank()) return "Informe seu nome.";
         if (sobrenome.getText().isBlank()) return "Informe seu sobrenome.";
         if (!rm.getText().matches("\\d{4,8}")) return "O RM deve ter de 4 a 8 dígitos.";
         if (curso == null || curso.isBlank()) return "Selecione seu curso.";
         if (ano == null) return "Selecione o ano que você cursa.";
+        if (turno == null) return "Selecione seu turno.";
         if (!email.getText().trim().matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) return "Informe um e-mail válido.";
         if (senha.getText().length() < 6) return "A senha deve ter pelo menos 6 caracteres.";
         if (!senha.getText().equals(confirma.getText())) return "As senhas não coincidem.";

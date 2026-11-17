@@ -61,6 +61,7 @@ public class AuthService {
         u.setEmail(r.email().trim().toLowerCase());
         u.setCurso(r.curso().trim());
         u.setAno(r.ano());
+        u.setTurno(r.turno());
         u.setSenhaHash(encoder.encode(r.senha()));
         usuarios.save(u);
         return new AuthResponse(jwt.gerar(u), mapper.usuario(u));

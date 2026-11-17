@@ -1,38 +1,28 @@
 package br.com.achou.api.service;
 
 import br.com.achou.api.config.AchouProperties;
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.FileSystemResource;
+import br.com.achou.api.domain.Arquivo;
+import br.com.achou.api.repository.ArquivoRepository;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-/** Armazena fotos em disco. O tipo é detectado pelos bytes (não pelo que o cliente declara). */
+/** Armazena fotos no banco de dados. O tipo é detectado pelos bytes (não pelo que o cliente declara). */
 @Service
 public class ArquivoService {
 
-    private static final Logger log = LoggerFactory.getLogger(ArquivoService.class);
     private static final Pattern NOME_VALIDO = Pattern.compile("[a-f0-9\\-]{36}\\.(jpg|png|webp)");
 
-    private final Path dir;
+    private final ArquivoRepository repositorio;
     private final long maximo;
 
-    public ArquivoService(AchouProperties props) {
-        this.dir = Path.of(props.uploads().dir()).toAbsolutePath().normalize();
+    public ArquivoService(ArquivoRepository repositorio, AchouProperties props) {
+        this.repositorio = repositorio;
         this.maximo = props.uploads().tamanhoMaximoBytes();
-    }
-
-    @PostConstruct
-    void criarDiretorio() throws IOException {
-        Files.createDirectories(dir);
     }
 
     /** Valida e grava a imagem; devolve o nome do arquivo gerado. */
@@ -48,33 +38,22 @@ public class ArquivoService {
             throw ApiException.invalido("Formato de imagem não suportado. Use JPG, PNG ou WebP.");
         }
         String nome = UUID.randomUUID() + "." + ext;
-        try {
-            Files.write(dir.resolve(nome), dados);
-        } catch (IOException e) {
-            log.error("Erro ao gravar imagem", e);
-            throw new ApiException(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR, "Não foi possível salvar a imagem.");
-        }
+        repositorio.save(new Arquivo(nome, dados));
         return nome;
     }
 
     public void excluir(String nome) {
         if (nome == null || !NOME_VALIDO.matcher(nome).matches()) return;
-        try {
-            Files.deleteIfExists(dir.resolve(nome));
-        } catch (IOException e) {
-            log.warn("Não foi possível apagar {}", nome, e);
-        }
+        repositorio.deleteById(nome);
     }
 
     public Resource carregar(String nome) {
         if (nome == null || !NOME_VALIDO.matcher(nome).matches()) {
             throw ApiException.naoEncontrado("Arquivo não encontrado.");
         }
-        Path p = dir.resolve(nome).normalize();
-        if (!p.startsWith(dir) || !Files.isReadable(p)) {
-            throw ApiException.naoEncontrado("Arquivo não encontrado.");
-        }
-        return new FileSystemResource(p);
+        Arquivo a = repositorio.findById(nome)
+                .orElseThrow(() -> ApiException.naoEncontrado("Arquivo não encontrado."));
+        return new ByteArrayResource(a.getDados());
     }
 
     public MediaType tipoDe(String nome) {

@@ -8,9 +8,28 @@ public final class Dtos {
 
     private Dtos() {}
 
+    /** Espelho de {@code br.com.achou.api.domain.Turno}: o nome trafega na API, o rótulo aparece na tela. */
+    public enum Turno {
+        MANHA("Manhã"), TARDE("Tarde"), NOITE("Noite");
+
+        public final String rotulo;
+
+        Turno(String rotulo) {
+            this.rotulo = rotulo;
+        }
+
+        /** O ComboBox usa toString() para exibir cada opção. */
+        @Override
+        public String toString() {
+            return rotulo;
+        }
+    }
+
     // ----- respostas -----
+    /** {@code turno}/{@code turnoRotulo} são nulos em contas antigas, criadas antes do campo existir. */
     public record Usuario(Long id, String rm, String nome, String sobrenome, String nomeCompleto, String email,
-                          String curso, int ano, String turma, String fotoUrl, Instant criadoEm) {}
+                          String curso, int ano, String turma, String turno, String turnoRotulo,
+                          String fotoUrl, Instant criadoEm) {}
 
     public record Autor(Long id, String nome, String sobrenome, String nomeCompleto, String turma, String fotoUrl) {}
 
@@ -32,9 +51,10 @@ public final class Dtos {
 
     // ----- requisições -----
     public record Cadastro(String nome, String sobrenome, String rm, String email, String curso, int ano,
-                           String senha) {}
+                           Turno turno, String senha) {}
 
-    public record AtualizarPerfil(String nome, String sobrenome, String email, String curso, int ano) {}
+    public record AtualizarPerfil(String nome, String sobrenome, String email, String curso, int ano,
+                                  Turno turno) {}
 
     public record NovaPublicacao(String tipo, String titulo, String descricao, String categoria,
                                  String subcategoria, String local) {}

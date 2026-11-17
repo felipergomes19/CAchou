@@ -1,0 +1,17 @@
+# PostgreSQL local para desenvolvimento.  Subir:  docker compose up -d
+# Os valores abaixo coincidem com os padrões do application.yml (usuário/senha "achou", banco "achou").
+# NÃO use esta senha em nuvem: lá, defina ACHOU_DB_* com as credenciais do banco gerenciado.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: achou
+      POSTGRES_USER: achou
+      POSTGRES_PASSWORD: achou
+    ports:
+      - "5432:5432"
+    volumes:
+      - achou-pg:/var/lib/postgresql/data
+
+volumes:
+  achou-pg:

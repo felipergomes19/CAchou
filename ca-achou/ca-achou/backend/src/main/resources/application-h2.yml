@@ -1,0 +1,7 @@
+# Perfil de desenvolvimento SEM Postgres: banco H2 em arquivo (./data/achou).
+# Uso: mvn spring-boot:run -Dspring-boot.run.profiles=h2
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/achou;AUTO_SERVER=TRUE
+    username: sa
+    password: ""

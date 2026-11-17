@@ -39,7 +39,8 @@ public final class ProfileView extends ScrollPane {
         av.definir(u.nomeCompleto(), u.fotoUrl());
         HBox topo = new HBox(18, av, new VBox(2,
                 Ui.texto(u.nomeCompleto(), "title-xl"),
-                Ui.texto(u.turma() + " · RM " + u.rm(), "muted"),
+                Ui.texto(u.turma() + " · " + (u.turnoRotulo() == null ? "Turno não informado"
+                        : "Turno " + u.turnoRotulo()) + " · RM " + u.rm(), "muted"),
                 Ui.texto("Membro desde " + Fmt.data(u.criadoEm()), "muted", "small")));
         topo.setAlignment(Pos.CENTER_LEFT);
 
@@ -89,24 +90,32 @@ public final class ProfileView extends ScrollPane {
             @Override public Integer fromString(String s) { return null; }
         });
         ano.setMaxWidth(Double.MAX_VALUE);
+        ComboBox<Dtos.Turno> turno = new ComboBox<>();
+        turno.getItems().addAll(Dtos.Turno.values());
+        turno.setPromptText("Selecione");
+        // contas antigas não têm turno: o campo começa vazio e o aluno precisa escolher ao salvar
+        if (u.turno() != null) turno.setValue(Dtos.Turno.valueOf(u.turno()));
+        turno.setMaxWidth(Double.MAX_VALUE);
 
         HBox l1 = dois(Ui.campo("Nome", nome), Ui.campo("Sobrenome", sobrenome));
         VBox cCurso = Ui.campo("Curso", curso);
         VBox cAno = Ui.campo("Ano", ano);
+        VBox cTurno = Ui.campo("Turno", turno);
         HBox.setHgrow(cCurso, Priority.ALWAYS);
-        HBox l2 = new HBox(12, cCurso, cAno);
+        HBox l2 = new HBox(12, cCurso, cAno, cTurno);
 
         Button salvar = Ui.botao("Salvar alterações", "primary", null, null);
         salvar.setOnAction(e -> {
             String c = curso.getEditor().getText().trim();
             if (nome.getText().isBlank() || sobrenome.getText().isBlank() || c.isEmpty()
-                    || !email.getText().trim().matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+") || ano.getValue() == null) {
-                Ctx.toast("Confira nome, sobrenome, e-mail, curso e ano.");
+                    || !email.getText().trim().matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+") || ano.getValue() == null
+                    || turno.getValue() == null) {
+                Ctx.toast("Confira nome, sobrenome, e-mail, curso, ano e turno.");
                 return;
             }
             Ui.ocupado(salvar, true, "Salvar alterações");
             var req = new Dtos.AtualizarPerfil(nome.getText().trim(), sobrenome.getText().trim(),
-                    email.getText().trim(), c, ano.getValue());
+                    email.getText().trim(), c, ano.getValue(), turno.getValue());
             Async.run(() -> Ctx.api.atualizarPerfil(req), novo -> {
                 Ctx.usuario.set(novo);
                 Ctx.atualizarFeed.run();

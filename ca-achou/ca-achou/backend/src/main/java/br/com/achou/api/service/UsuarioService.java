@@ -50,6 +50,7 @@ public class UsuarioService {
         u.setEmail(r.email().trim().toLowerCase());
         u.setCurso(r.curso().trim());
         u.setAno(r.ano());
+        u.setTurno(r.turno());
         return mapper.usuario(usuarios.save(u));
     }
 
